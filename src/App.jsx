@@ -1275,7 +1275,7 @@ export default function App() {
                 {isSharedLink && (
                   <button
                     onClick={() => {
-                      const msg = `I'd love: ${pInfo.label} + ${sInfo.label} + ${vInfo.label}${seasoning ? ` with ${seasoning.name} seasoning` : ""}!`;
+                      const msg = `I'd love: ${pInfo.label} + ${sInfo.label} + ${vInfo.label}${seasoning ? `\n\nSeasoning: ${seasoning.name} — ${seasoning.desc}` : ""}!`;
                       navigator.clipboard.writeText(msg).then(() => {
                         setMsgCopied(true);
                         setTimeout(() => setMsgCopied(false), 2500);
