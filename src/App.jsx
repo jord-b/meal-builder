@@ -461,16 +461,18 @@ function IngredientCard({ item, category, onClick, selected, checkmark }) {
         alignItems: "center",
         gap: "10px",
         padding: "11px 13px",
-        background: selected ? `${info.color}44` : "rgba(255,255,255,0.05)",
-        border: `2px solid ${selected ? info.color : "rgba(255,255,255,0.1)"}`,
+        background: selected ? `${info.color}18` : "#fff",
+        border: `2px solid ${selected ? info.color : "#e8e8e8"}`,
         borderRadius: "12px",
-        color: selected ? "#fff" : "rgba(255,255,255,0.75)",
+        color: selected ? "#1a1a1a" : "#555",
         cursor: "pointer",
         fontSize: "13px",
         fontFamily: "'DM Sans', sans-serif",
         fontWeight: selected ? "600" : "400",
         transform: selected ? "scale(1.02)" : "scale(1)",
-        boxShadow: selected ? `0 4px 16px ${info.color}44` : "none",
+        boxShadow: selected
+          ? `0 4px 16px ${info.color}30`
+          : "0 1px 3px rgba(0,0,0,0.06)",
         transition: "all 0.18s ease",
         textAlign: "left",
       }}
@@ -481,7 +483,7 @@ function IngredientCard({ item, category, onClick, selected, checkmark }) {
         <span
           style={{
             fontSize: "13px",
-            color: selected ? "#7aab8a" : "rgba(255,255,255,0.15)",
+            color: selected ? "#2d8a4e" : "#ccc",
           }}
         >
           {selected ? "✓" : "○"}
@@ -498,7 +500,7 @@ function StepDot({ num, label, done, active }) {
         display: "flex",
         alignItems: "center",
         gap: "7px",
-        opacity: active || done ? 1 : 0.3,
+        opacity: active || done ? 1 : 0.35,
       }}
     >
       <div
@@ -508,10 +510,10 @@ function StepDot({ num, label, done, active }) {
           borderRadius: "50%",
           flexShrink: 0,
           background: done
-            ? "#7aab8a"
+            ? "#2d8a4e"
             : active
-            ? "#c8956c"
-            : "rgba(255,255,255,0.1)",
+            ? "#ff6b35"
+            : "#e0e0e0",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -529,10 +531,10 @@ function StepDot({ num, label, done, active }) {
           fontSize: "12px",
           fontFamily: "'DM Sans', sans-serif",
           color: done
-            ? "#7aab8a"
+            ? "#2d8a4e"
             : active
-            ? "#c8a06a"
-            : "rgba(255,255,255,0.4)",
+            ? "#ff6b35"
+            : "#aaa",
         }}
       >
         {label}
@@ -542,23 +544,23 @@ function StepDot({ num, label, done, active }) {
 }
 
 const titleStyle = {
-  fontFamily: "'Playfair Display', serif",
+  fontFamily: "'DM Sans', sans-serif",
   fontSize: "26px",
-  fontWeight: "600",
-  color: "#f0e6d0",
+  fontWeight: "700",
+  color: "#1a1a1a",
   margin: "0 0 2px 0",
   letterSpacing: "-0.3px",
 };
 const subStyle = {
-  color: "rgba(240,230,200,0.4)",
+  color: "#999",
   fontSize: "13px",
   margin: 0,
   fontFamily: "'DM Sans', sans-serif",
 };
 const ghostBtn = {
-  background: "rgba(255,255,255,0.07)",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "rgba(255,255,255,0.45)",
+  background: "#f5f5f5",
+  border: "1px solid #e0e0e0",
+  color: "#777",
   borderRadius: "8px",
   padding: "6px 12px",
   fontSize: "12px",
@@ -566,9 +568,9 @@ const ghostBtn = {
   fontFamily: "'DM Sans', sans-serif",
 };
 const tinyBtn = {
-  background: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "rgba(240,230,200,0.4)",
+  background: "#f5f5f5",
+  border: "1px solid #e0e0e0",
+  color: "#888",
   borderRadius: "6px",
   padding: "3px 9px",
   fontSize: "11px",
@@ -581,18 +583,17 @@ function Wrapper({ children }) {
     <div
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #1a1410 0%, #221a12 50%, #1a1a14 100%)",
+        background: "linear-gradient(160deg, #f8faf8 0%, #fff8f2 50%, #f0f7f2 100%)",
         padding: "28px 16px 48px",
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
       />
       <div style={{ maxWidth: "480px", margin: "0 auto" }}>{children}</div>
-      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}} button:hover{opacity:0.85}`}</style>
+      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}} button:hover{opacity:0.9}`}</style>
     </div>
   );
 }
@@ -606,6 +607,8 @@ export default function App() {
   });
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const [isSharedLink, setIsSharedLink] = useState(false);
+  const [msgCopied, setMsgCopied] = useState(false);
 
   // Builder state
   const [firstCat, setFirstCat] = useState(null);
@@ -622,6 +625,7 @@ export default function App() {
     ) {
       setPantry(decoded);
       setMode("build");
+      setIsSharedLink(true);
     }
   }, []);
 
@@ -757,7 +761,7 @@ export default function App() {
             >
               <span
                 style={{
-                  color: "rgba(240,230,200,0.6)",
+                  color: "#666",
                   fontSize: "11px",
                   textTransform: "uppercase",
                   letterSpacing: "0.8px",
@@ -765,7 +769,7 @@ export default function App() {
                 }}
               >
                 {CategoryEmoji[cat]} {CategoryLabel[cat]}s &nbsp;
-                <span style={{ color: "rgba(240,230,200,0.3)" }}>
+                <span style={{ color: "#aaa" }}>
                   ({pantry[cat].length}/{Object.keys(DATA[cat]).length})
                 </span>
               </span>
@@ -816,16 +820,17 @@ export default function App() {
               padding: "15px",
               background:
                 pantryCount > 0
-                  ? "linear-gradient(135deg, #c8956c, #d4784a)"
-                  : "rgba(255,255,255,0.08)",
+                  ? "linear-gradient(135deg, #2d8a4e, #22a355)"
+                  : "#e8e8e8",
               border: "none",
               borderRadius: "12px",
-              color: "#fff",
+              color: pantryCount > 0 ? "#fff" : "#aaa",
               fontSize: "14px",
               fontWeight: "600",
               cursor: pantryCount > 0 ? "pointer" : "default",
               fontFamily: "'DM Sans', sans-serif",
               transition: "all 0.2s",
+              boxShadow: pantryCount > 0 ? "0 4px 14px rgba(45,138,78,0.3)" : "none",
             }}
           >
             {copied
@@ -839,12 +844,12 @@ export default function App() {
               style={{
                 marginTop: "8px",
                 padding: "9px 12px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "#f5f5f5",
+                border: "1px solid #e0e0e0",
                 borderRadius: "10px",
                 wordBreak: "break-all",
                 fontSize: "10px",
-                color: "rgba(240,230,200,0.3)",
+                color: "#999",
                 fontFamily: "monospace",
               }}
             >
@@ -869,7 +874,7 @@ export default function App() {
         >
           <div>
             <h1 style={titleStyle}>Meal Builder</h1>
-            <p style={subStyle}>
+            <p style={{ ...subStyle }}>
               {pantry.proteins.length
                 ? `Showing your ${pantryCount} pantry items`
                 : "All ingredients available"}
@@ -926,7 +931,7 @@ export default function App() {
               style={{
                 ...subStyle,
                 marginBottom: "14px",
-                color: "rgba(240,230,200,0.55)",
+                color: "#777",
               }}
             >
               What are you in the mood for?
@@ -947,16 +952,17 @@ export default function App() {
                       alignItems: "center",
                       gap: "14px",
                       padding: "16px 18px",
-                      background: "rgba(255,255,255,0.05)",
-                      border: "2px solid rgba(255,255,255,0.1)",
+                      background: "#fff",
+                      border: "2px solid #e8e8e8",
                       borderRadius: "14px",
-                      color: "#f0e6d0",
+                      color: "#1a1a1a",
                       cursor: "pointer",
                       fontSize: "15px",
                       fontFamily: "'DM Sans', sans-serif",
                       fontWeight: "500",
                       textAlign: "left",
                       transition: "all 0.2s",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
                     }}
                   >
                     <span style={{ fontSize: "26px" }}>
@@ -969,7 +975,7 @@ export default function App() {
                       <div
                         style={{
                           fontSize: "11px",
-                          color: "rgba(240,230,200,0.3)",
+                          color: "#aaa",
                           marginTop: "2px",
                         }}
                       >
@@ -1012,7 +1018,7 @@ export default function App() {
                     <span>{prevInfo.icon}</span>
                     <span
                       style={{
-                        color: "rgba(240,230,200,0.65)",
+                        color: "#555",
                         fontSize: "13px",
                         fontFamily: "'DM Sans', sans-serif",
                       }}
@@ -1025,7 +1031,7 @@ export default function App() {
                   <>
                     <p
                       style={{
-                        color: "rgba(240,230,200,0.45)",
+                        color: "#888",
                         fontSize: "11px",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
@@ -1067,7 +1073,7 @@ export default function App() {
                   <>
                     <p
                       style={{
-                        color: "rgba(240,230,200,0.25)",
+                        color: "#bbb",
                         fontSize: "11px",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
@@ -1115,7 +1121,7 @@ export default function App() {
               <div>
                 <p
                   style={{
-                    color: "#7aab8a",
+                    color: "#2d8a4e",
                     fontSize: "11px",
                     fontWeight: "600",
                     textTransform: "uppercase",
@@ -1138,8 +1144,8 @@ export default function App() {
                       key={cat}
                       style={{
                         flex: 1,
-                        background: `linear-gradient(135deg, ${info.color}33, ${info.color}11)`,
-                        border: `1px solid ${info.color}55`,
+                        background: `${info.color}12`,
+                        border: `1px solid ${info.color}40`,
                         borderRadius: "12px",
                         padding: "12px",
                         textAlign: "center",
@@ -1151,7 +1157,7 @@ export default function App() {
                       <div
                         style={{
                           fontSize: "10px",
-                          color: "rgba(240,230,200,0.3)",
+                          color: "#999",
                           textTransform: "uppercase",
                           letterSpacing: "0.4px",
                           fontFamily: "'DM Sans', sans-serif",
@@ -1162,7 +1168,7 @@ export default function App() {
                       <div
                         style={{
                           fontSize: "12px",
-                          color: "#f0e6d0",
+                          color: "#1a1a1a",
                           fontWeight: "600",
                           marginTop: "2px",
                           fontFamily: "'DM Sans', sans-serif",
@@ -1176,8 +1182,8 @@ export default function App() {
                 {seasoning && (
                   <div
                     style={{
-                      background: "rgba(200,149,108,0.1)",
-                      border: "1px solid rgba(200,149,108,0.3)",
+                      background: "#fff8f2",
+                      border: "1px solid #f0d8c0",
                       borderRadius: "14px",
                       padding: "16px",
                       marginBottom: "12px",
@@ -1196,7 +1202,7 @@ export default function App() {
                         <span
                           style={{
                             fontSize: "10px",
-                            color: "rgba(200,149,108,0.6)",
+                            color: "#c09060",
                             textTransform: "uppercase",
                             letterSpacing: "0.4px",
                             display: "block",
@@ -1208,9 +1214,9 @@ export default function App() {
                         <span
                           style={{
                             fontSize: "15px",
-                            color: "#c8956c",
-                            fontWeight: "600",
-                            fontFamily: "'Playfair Display', serif",
+                            color: "#ff6b35",
+                            fontWeight: "700",
+                            fontFamily: "'DM Sans', sans-serif",
                           }}
                         >
                           {seasoning.name}
@@ -1219,7 +1225,7 @@ export default function App() {
                     </div>
                     <p
                       style={{
-                        color: "rgba(240,230,200,0.65)",
+                        color: "#666",
                         fontSize: "13px",
                         margin: 0,
                         lineHeight: "1.6",
@@ -1232,8 +1238,8 @@ export default function App() {
                 )}
                 <div
                   style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "#f8f8f8",
+                    border: "1px solid #e8e8e8",
                     borderRadius: "12px",
                     padding: "14px",
                     marginBottom: "12px",
@@ -1241,7 +1247,7 @@ export default function App() {
                 >
                   <p
                     style={{
-                      color: "rgba(240,230,200,0.35)",
+                      color: "#aaa",
                       fontSize: "11px",
                       textTransform: "uppercase",
                       letterSpacing: "0.4px",
@@ -1253,7 +1259,7 @@ export default function App() {
                   </p>
                   <p
                     style={{
-                      color: "rgba(240,230,200,0.7)",
+                      color: "#555",
                       fontSize: "13px",
                       margin: 0,
                       lineHeight: "1.7",
@@ -1263,15 +1269,47 @@ export default function App() {
                     Season your {pInfo.label.toLowerCase()} and cook over medium
                     heat. Prepare your {sInfo.label.toLowerCase()} per package
                     directions. Roast or sauté your {vInfo.label.toLowerCase()}{" "}
-                    with olive oil until tender. Dinner sorted 🎉
+                    with olive oil until tender. Dinner sorted!
                   </p>
                 </div>
+                {isSharedLink && (
+                  <button
+                    onClick={() => {
+                      const msg = `I'd love: ${pInfo.label} + ${sInfo.label} + ${vInfo.label}${seasoning ? ` with ${seasoning.name} seasoning` : ""}!`;
+                      navigator.clipboard.writeText(msg).then(() => {
+                        setMsgCopied(true);
+                        setTimeout(() => setMsgCopied(false), 2500);
+                      });
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "14px",
+                      background: msgCopied
+                        ? "linear-gradient(135deg, #2d8a4e, #22a355)"
+                        : "linear-gradient(135deg, #ff6b35, #ff8f5e)",
+                      border: "none",
+                      borderRadius: "12px",
+                      color: "#fff",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      fontFamily: "'DM Sans', sans-serif",
+                      marginBottom: "8px",
+                      boxShadow: msgCopied
+                        ? "0 4px 14px rgba(45,138,78,0.3)"
+                        : "0 4px 14px rgba(255,107,53,0.3)",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    {msgCopied ? "✓ Meal choice copied — send it back!" : "I want this! 🙌"}
+                  </button>
+                )}
                 <button
                   onClick={resetBuilder}
                   style={{
                     width: "100%",
                     padding: "14px",
-                    background: "linear-gradient(135deg, #c8956c, #d4784a)",
+                    background: "linear-gradient(135deg, #2d8a4e, #22a355)",
                     border: "none",
                     borderRadius: "12px",
                     color: "#fff",
@@ -1279,9 +1317,10 @@ export default function App() {
                     fontWeight: "600",
                     cursor: "pointer",
                     fontFamily: "'DM Sans', sans-serif",
+                    boxShadow: "0 4px 14px rgba(45,138,78,0.3)",
                   }}
                 >
-                  Build another meal →
+                  Build another meal
                 </button>
               </div>
             );
@@ -1304,7 +1343,7 @@ export default function App() {
           width: "100%",
           padding: "20px",
           marginBottom: "12px",
-          background: "linear-gradient(135deg, #c8956c, #d4784a)",
+          background: "linear-gradient(135deg, #ff6b35, #ff8f5e)",
           border: "none",
           borderRadius: "16px",
           color: "#fff",
@@ -1317,6 +1356,7 @@ export default function App() {
           alignItems: "center",
           justifyContent: "center",
           gap: "10px",
+          boxShadow: "0 4px 18px rgba(255,107,53,0.3)",
         }}
       >
         <span style={{ fontSize: "22px" }}>🍽️</span> Build a Meal
@@ -1326,10 +1366,10 @@ export default function App() {
         style={{
           width: "100%",
           padding: "18px",
-          background: "rgba(255,255,255,0.06)",
-          border: "2px solid rgba(255,255,255,0.12)",
+          background: "#fff",
+          border: "2px solid #e0e0e0",
           borderRadius: "16px",
-          color: "rgba(240,230,200,0.7)",
+          color: "#555",
           fontSize: "15px",
           fontWeight: "500",
           cursor: "pointer",
@@ -1338,6 +1378,7 @@ export default function App() {
           alignItems: "center",
           justifyContent: "center",
           gap: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
         }}
       >
         <span style={{ fontSize: "20px" }}>🧺</span> Set up my pantry &amp;
@@ -1345,7 +1386,7 @@ export default function App() {
       </button>
       <p
         style={{
-          color: "rgba(240,230,200,0.2)",
+          color: "#bbb",
           fontSize: "12px",
           textAlign: "center",
           marginTop: "20px",
